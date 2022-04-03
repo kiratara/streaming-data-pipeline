@@ -5,7 +5,15 @@ object StretchProblems {
   /*
   Checks if a string is palindrome.
  */
-  def isPalindrome(s: String): Boolean = ???
+  def isPalindrome(s: String): Boolean = {
+    if (s.length == 0) {
+      return true
+    } else if (s(0) != s(s.length - 1)){
+      return false
+    } else {
+      isPalindrome(s.substring(1, s.length - 1))
+    }
+  }
 
   /*
 For a given number, return the next largest number that can be created by rearranging that number's digits.
