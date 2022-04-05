@@ -14,8 +14,9 @@ object KafkaHomework {
    */
 
     //TODO: If these are given in class, change them so that you can run a test. If not, don't worry about this step
-  val BootstrapServer = "change-me"
-  val Topic: String = "change-me"
+    //BootstrapServer - where is the server located
+  val BootstrapServer = "b-2-public.hwe-kafka-cluster.l384po.c8.kafka.us-west-2.amazonaws.com:9196,b-1-public.hwe-kafka-cluster.l384po.c8.kafka.us-west-2.amazonaws.com:9196,b-3-public.hwe-kafka-cluster.l384po.c8.kafka.us-west-2.amazonaws.com:9196"
+  val Topic: String = "hwe-kafka-connection-test"
 
   implicit val formats: DefaultFormats.type = DefaultFormats
 
@@ -23,23 +24,27 @@ object KafkaHomework {
 
     // Create the KafkaConsumer
     //TODO: Write in a comment what these lines are doing. What are the properties necessary to instantiate a consumer?
+    //create consumer instance
     val properties = getProperties(BootstrapServer)
     val consumer: KafkaConsumer[String, String] = new KafkaConsumer[String, String](properties)
 
 
     //TODO: What does this line mean? Write your answer in a comment below
+    // List of the topic(s) it is reading from
     consumer.subscribe(Arrays.asList(Topic))
 
     while (true) {
       // TODO: Change this to be every 5 seconds
-      val duration: Duration = Duration.ofMillis(100)
+      val duration: Duration = Duration.ofMillis(5000)
 
       //TODO: Look up the ConsumerRecords class below, in your own words what is the class designed to do?
+      // It holds the data returned from kafka
       val records: ConsumerRecords[String, String] = consumer.poll(duration)
 
       records.forEach((record: ConsumerRecord[String, String]) => {
         // Retrieve the message from each record
         //TODO: Describe why we need the .value() at the end of record
+        // the record contains more that value, but we want the value.
         val message = record.value()
 
         //TODO: If you were given the values for the bootstrap servers in class, run the app with the green play button and make sure it runs successfully. You should see message(s) printing out to the screen

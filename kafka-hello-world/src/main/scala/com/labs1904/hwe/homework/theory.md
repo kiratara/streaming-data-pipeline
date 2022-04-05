@@ -48,10 +48,11 @@ reword confusing descriptions in a way that makes sense to you.
   * Basically, a system that enables Event Streaming as described above under "What problem does Kafka help solve"
 
 #### Describe each of the following with an example of how they all fit together: 
- * Topic: A grouping of Partitions handling the same type of data/event/record/message. Ordered collections of events stored in a disk and replicated.
-   * Can be small or enormous
-   * Can be stored for short or very long time 
-   * Each item in topic represents an event happening in real world
+ * Topic: A grouping of Partitions handling the same type of data/event/record/message. 
+   * Ordered collections of events stored in a disk and replicated.
+     * Can be small or enormous
+     * Can be stored for short or very long time 
+     * Each item in topic represents an event happening in real world
  * Producer: Application that writes data to the brokers. 
  * Consumer: Application that consumes data from the brokers
    * Consumers are the applications that utilize the offset and read from the partitions within each broker.

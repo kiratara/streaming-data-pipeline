@@ -10,8 +10,8 @@ import java.util.{Arrays, Properties, UUID}
 
 object SimpleConsumer {
   val BootstrapServer : String = "CHANGEME"
-  val Topic: String = "CHANGEME"
-  val username: String = "CHANGEME"
+  val Topic: String = "question-1"
+  val username: String = "hwe"
   val password: String = "CHANGEME"
   //Use this for Windows
   val trustStore: String = "src\\main\\resources\\kafka.client.truststore.jks"
