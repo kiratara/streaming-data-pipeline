@@ -20,8 +20,12 @@ For a given number, return the next largest number that can be created by rearra
 If no larger number can be created, return -1
  */
   def getNextBiggestNumber(i: Integer): Int = {
-    //TODO: Implement me!
-    0
+    // in some way, traverse from tail. If you come across a number that is greater than the next, swap
+
+//    val strI = i.toString;
+    val reversedStrI = (i.toString).reverse
+
+
   }
 
 }
