@@ -1,5 +1,6 @@
 package com.labs1904.hwe.producers
 
+import com.labs1904.hwe.util.Util.getScramAuthString
 import org.apache.kafka.clients.producer.{Callback, KafkaProducer, ProducerConfig, ProducerRecord, RecordMetadata}
 import org.apache.kafka.common.serialization.StringSerializer
 import faker._
@@ -12,8 +13,14 @@ case class User(name: String, username: String, email: String)
 
 object ProducerWithFaker {
   implicit val formats: DefaultFormats.type = DefaultFormats
-  val BootstrapServer = "35.239.241.212:9092,35.239.230.132:9092,34.69.66.216:9092"
-  val Topic: String = "users"
+  val BootstrapServer : String = "b-2-public.hwe-kafka-cluster.l384po.c8.kafka.us-west-2.amazonaws.com:9196,b-1-public.hwe-kafka-cluster.l384po.c8.kafka.us-west-2.amazonaws.com:9196,b-3-public.hwe-kafka-cluster.l384po.c8.kafka.us-west-2.amazonaws.com:9196"
+  val Topic: String = "question-1-output"
+  val username: String = "hwe"
+  val password: String = "1904labs"
+  //Use this for Windows
+//  val trustStore: String = "src\\main\\resources\\kafka.client.truststore.jks"
+  //Use this for Mac
+  val trustStore: String = "src/main/resources/kafka.client.truststore.jks"
 
   def main(args: Array[String]): Unit = {
 
@@ -30,13 +37,14 @@ object ProducerWithFaker {
 
       // Use the faker library ( https://github.com/bitblitconsulting/scala-faker ) to generate Users
       // User, as a case class, is defined at the top of this file
-      val name = Name.name
+      val name = Name.name + "st"
       val user = User(name, Internet.user_name(name), Internet.free_email(name))
 
-      // write scala case class to a JSON string
-      val jsonString = write(user)
+      // Switching to use CSV instead of JSON
+      //val jsonString = write(user)
+      val csvString = key + "," + name.replace(",","") + "," + user.email.replace(",","")
 
-      new ProducerRecord[String, String](Topic, key, jsonString)
+      new ProducerRecord[String, String](Topic, key, csvString)
     }).foreach(record => {
 
       // send records to topic
@@ -66,6 +74,12 @@ object ProducerWithFaker {
     properties.setProperty(ProducerConfig.ACKS_CONFIG, "1")
     properties.setProperty(ProducerConfig.KEY_SERIALIZER_CLASS_CONFIG, classOf[StringSerializer].getName)
     properties.setProperty(ProducerConfig.VALUE_SERIALIZER_CLASS_CONFIG, classOf[StringSerializer].getName)
+
+    properties.put("security.protocol", "SASL_SSL")
+    properties.put("sasl.mechanism", "SCRAM-SHA-512")
+    properties.put("ssl.truststore.location", trustStore)
+    properties.put("sasl.jaas.config", getScramAuthString(username, password))
+
     properties
   }
 }
