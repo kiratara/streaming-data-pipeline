@@ -21,19 +21,16 @@ object WordCountBatchApp {
       import spark.implicits._
 
       val sentences = spark.read.csv("src/main/resources/sentences.txt").as[String]
-      sentences.printSchema
+//      sentences.printSchema
       //sentences.show()
 
       // TODO: implement me
-      val splitWordsDf = sentences.map(row => splitSentenceIntoWords(row))
-      splitWordsDf.show()
-      val wordDf = splitWordsDf.map(word)
-
-      //        val splitWords.map(word => {
-//          val wordInstance = Word(word, 1)
-//        })
-      //val counts = ???
-
+      val splitWordsDf = sentences.flatMap(row => splitSentenceIntoWords(row))
+//      splitWordsDf.show()
+      val wordDf = splitWordsDf.map(row => Word(row.toLowerCase(), 1))
+      //wordDf.show()
+      val wordCount = wordDf.groupBy(col("word")).count().sort(col("count").desc)
+      wordCount.show()
       //counts.foreach(wordCount=>println(wordCount))
     } catch {
       case e: Exception => logger.error(s"$jobName error in main", e)
