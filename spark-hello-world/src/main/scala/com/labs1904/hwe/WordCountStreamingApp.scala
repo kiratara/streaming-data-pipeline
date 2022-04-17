@@ -6,6 +6,7 @@ import org.apache.log4j.Logger
 import org.apache.spark.sql.functions._
 import org.apache.spark.sql.streaming.{OutputMode, Trigger}
 import org.apache.spark.sql.SparkSession
+import org.apache.spark.sql.types.StructType
 
 import java.util.Properties
 
@@ -16,10 +17,11 @@ object WordCountStreamingApp {
   lazy val logger: Logger = Logger.getLogger(this.getClass)
   val jobName = "WordCountStreamingApp"
   // TODO: define the schema for parsing data from Kafka
-
-  val bootstrapServer : String = "CHANGEME"
-  val username: String = "CHANGEME"
-  val password: String = "CHANGEME"
+//  val schema = new StructType().
+//    add("")
+  val bootstrapServer : String = "35.239.241.212:9092, 35.239.230.132:9092,34.69.66.216:9092"
+  val username: String = "hwe"
+  val password: String = "1904labs"
   val Topic: String = "word-count"
 
   //Use this for Windows
@@ -39,6 +41,7 @@ object WordCountStreamingApp {
 
       import spark.implicits._
 
+      //define dataframe coming from Kafka, read from Kafka
       val sentences = spark
         .readStream
         .format("kafka")
@@ -61,6 +64,7 @@ object WordCountStreamingApp {
       // TODO: implement me
       //val counts = ???
 
+      // printing the data to the console
       val query = sentences.writeStream
         .outputMode(OutputMode.Append())
         .format("console")
