@@ -6,20 +6,23 @@ import org.apache.log4j.Logger
 import org.apache.spark.sql.functions._
 import org.apache.spark.sql.streaming.{OutputMode, Trigger}
 import org.apache.spark.sql.SparkSession
-import org.apache.spark.sql.types.StructType
+import org.apache.spark.sql.types.{StringType, StructType}
 
 import java.util.Properties
 
 /**
  * Spark Structured Streaming app
  */
+case class WordClass(word: String, num: Int)
+
 object WordCountStreamingApp {
   lazy val logger: Logger = Logger.getLogger(this.getClass)
   val jobName = "WordCountStreamingApp"
   // TODO: define the schema for parsing data from Kafka
 //  val schema = new StructType().
-//    add("")
-  val bootstrapServer : String = "35.239.241.212:9092, 35.239.230.132:9092,34.69.66.216:9092"
+//    add("sentence", StringType, nullable = true)
+//  val bootstrapServer : String = "35.239.241.212:9092, 35.239.230.132:9092,34.69.66.216:9092"
+  val bootstrapServer : String = "b-2-public.hwe-kafka-cluster.l384po.c8.kafka.us-west-2.amazonaws.com:9196,b-1-public.hwe-kafka-cluster.l384po.c8.kafka.us-west-2.amazonaws.com:9196,b-3-public.hwe-kafka-cluster.l384po.c8.kafka.us-west-2.amazonaws.com:9196"
   val username: String = "hwe"
   val password: String = "1904labs"
   val Topic: String = "word-count"
@@ -62,11 +65,16 @@ object WordCountStreamingApp {
       sentences.printSchema
 
       // TODO: implement me
-      //val counts = ???
+      val splitWordsDf = sentences.flatMap(row => splitSentenceIntoWords(row))
+      val wordDf = splitWordsDf.map(row => WordClass(row.toLowerCase(), 1))
+      val summaryDf = wordDf
+        .groupBy("word")
+        .count()
+        .sort(col("count").desc)
 
       // printing the data to the console
-      val query = sentences.writeStream
-        .outputMode(OutputMode.Append())
+      val query = summaryDf.writeStream
+        .outputMode(OutputMode.Complete())
         .format("console")
         .trigger(Trigger.ProcessingTime("5 seconds"))
         .start()
@@ -74,6 +82,10 @@ object WordCountStreamingApp {
       query.awaitTermination()
     } catch {
       case e: Exception => logger.error(s"$jobName error in main", e)
+    }
+    def splitSentenceIntoWords(sentence: String): Array[String] = {
+      val splitSentence = sentence.split(" ")
+      return splitSentence
     }
   }
 

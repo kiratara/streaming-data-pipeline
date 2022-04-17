@@ -11,6 +11,7 @@ import scala.util.Random
 /**
  * Spark Structured Streaming app
  */
+
 object HelloWorldStreamingApp {
   lazy val logger: Logger = Logger.getLogger(this.getClass)
   val jobName = "WordCountStreamingApp"
