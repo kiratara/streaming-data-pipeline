@@ -22,10 +22,6 @@ object WordCountStreamingApp {
 //  val schema = new StructType().
 //    add("sentence", StringType, nullable = true)
 //  val bootstrapServer : String = "35.239.241.212:9092, 35.239.230.132:9092,34.69.66.216:9092"
-  val bootstrapServer : String = "b-2-public.hwe-kafka-cluster.l384po.c8.kafka.us-west-2.amazonaws.com:9196,b-1-public.hwe-kafka-cluster.l384po.c8.kafka.us-west-2.amazonaws.com:9196,b-3-public.hwe-kafka-cluster.l384po.c8.kafka.us-west-2.amazonaws.com:9196"
-  val username: String = "hwe"
-  val password: String = "1904labs"
-  val Topic: String = "word-count"
 
   //Use this for Windows
   //val trustStore: String = "src\\main\\resources\\kafka.client.truststore.jks"

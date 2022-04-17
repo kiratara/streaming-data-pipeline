@@ -19,25 +19,56 @@ reword confusing descriptions in a way that makes sense to you.
 
 ## Questions
 #### What is a NoSQL database? 
+* non-relational databases, distributed. Do not have a strict structure
+* Key-value
+* document - semi-structured, store in document format, JSON: couchDB, mongoDB
+* columnar - similar to relational database, has rows and columns, BUT each row can have different format for its column
+* graph - organize data as nodes
+* Does not have query language but has API
 
 
 #### In your own words, what is Apache HBase? 
+* Non-relational database 
+* built on top of HDFS
+* Comprises set of standard tables with rows and columns, similar to traditional databases.
+* Each table has primary key and is needed to access the table
+* can serve as the input and output for MapReduce jobs
+* suitable for real-time rather than batch analytics
 
 
 #### What are some strengths and limitations of HBase? 
 * [HBase By Examples](https://sparkbyexamples.com/apache-hbase-tutorial/)
+* Difficult for querying
+* Cannot do join on the HBase tables
+* CPU and Memory intensive since it utlizies in-memory operations
+* Compound key is not possible
+* Single point of failure - HMaster, takes long time for the replica to replace if the original goes down
 
 #### Explain the following concepts: 
 * Rowkey
+  * Each row is referenced by a unique key - similar to Primary key in relational database.
+  * rows are sorted by this rowkey
 * Column Qualifier
+  * Within a column family
+  * Actual column names 
 * Column Family
+  * Logical and physical grouping of columns
+  * For each row, you do  not define a column, but instead define a column family which then can have columns
 
-
+  
 #### What are the differences between Get and Put commands in HBase? 
 * [HBase commands](https://www.tutorialspoint.com/hbase/hbase_create_data.htm)
+* Get
+  * Read data from a table
+* Put
+  * Used for inserting rows into a table
+  * put a cell 'value' at a specific table, row or column
 
 
 #### What is the HBase Scan command for? 
 * [HBase Scan](https://www.tutorialspoint.com/hbase/hbase_scan.htm)
+* used to view the data
+* If run in Hbase shell it will display the inserted values with column and row names
 
 #### What was the most interesting aspect of HBase when went through all the questions? 
+ 
